@@ -10,9 +10,8 @@ const postSchema=new mongoose.Schema({
   file:{type:String , require:true},
  likes:[
   {
-    likes:{
-        userId:{type:mongoose.Types.ObjectId , require:true,ref:"user"}
-    }
+        userId:{type:mongoose.Types.ObjectId , require:true,ref:"user"},
+        is_liked:{type:String,default:false}
   }
  ],
  comments:[

@@ -1,5 +1,6 @@
 const userSchema = require("../model/userSchema");
 const bcrypt = require("bcrypt");
+const TokenGenerate = require("../utils/TokenGenerate");
 
 module.exports = {
   create_Admin: async (req, res, next) => {
@@ -36,4 +37,23 @@ module.exports = {
     next(error)
     }
   },
+  admin_login: async (req, res, next) => {
+    try {
+      const { email, password } = req.body
+      if (!email) return res.send({ success: true, message: "user not found" })
+      const details = await userSchema.findOne({ email: email,role:1 });
+   
+    if(!details) return res.status(400).json({status:false,message:"invaild user"})
+      const matchPassword = await bcrypt.compare(password, details?.password)
+      if (!matchPassword) return res.status(400).json({ status: false, success: false, message: "invaild password" })
+      let Token = await TokenGenerate(details)
+      return res.status(200).json({ status: true, success: true, message: "admin logged successfully", data: { token: Token, name: details?.name, role: details?.role, email: details?.email } })
+
+
+    } catch (error) {
+      
+      console.log(error)
+      return res.status(500).json({status:false,error:error})
+    }
+  }
 };

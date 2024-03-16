@@ -2,10 +2,10 @@ const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
 
-// Multer configuration
+
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
-        // Determine destination folder based on file type
+     
         const allowedImageExtensions = ['.jpg', '.jpeg', '.png', '.gif'];
         const allowedVideoExtensions = ['.mp4', '.avi', '.mov', '.wmv','.webm'];
 
@@ -20,7 +20,6 @@ const storage = multer.diskStorage({
             return cb({ message: "Invalid file type" });
         }
 
-        // Create folder if it doesn't exist
         if (!fs.existsSync(destinationFolder)) {
             try {
                 fs.mkdirSync(destinationFolder, { recursive: true });
@@ -40,7 +39,7 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage: storage });
 
-// Function to handle file upload
+
 const handleFileUpload = (fileFieldName) => {
     return upload.single(fileFieldName);
 };
